@@ -6,7 +6,6 @@ namespace Xadrez_ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
         }
     }
 }
