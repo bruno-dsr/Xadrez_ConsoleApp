@@ -4,7 +4,7 @@ using System.Text;
 using Model;
 using Model.Enums;
 
-namespace Xadrez_ConsoleApp.Model
+namespace Model
 {
     class Peca
     {
