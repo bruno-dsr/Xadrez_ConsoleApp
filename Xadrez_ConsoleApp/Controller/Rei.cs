@@ -12,7 +12,7 @@ namespace Controller
 
         public override string ToString()
         {
-            return "R";
+            return "R ";
         }
     }
 }
