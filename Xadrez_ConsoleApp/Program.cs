@@ -12,12 +12,9 @@ namespace Xadrez_ConsoleApp
         {
             try
             {
-                Tabuleiro t = new Tabuleiro(8, 8);
+                Partida partida = new Partida();
 
-                t.ColocarPeca(new Torre(t, Cor.Branco), new Posicao(3, 3));
-                t.ColocarPeca(new Dama(t, Cor.Preto), new Posicao(3, 5));
-
-                Tela.ImprimirTabuleiro(t);
+                Tela.ImprimirTabuleiro(partida.Tabuleiro);
                 Console.WriteLine();
                 Tela.ImprimirLegendaPecas();
             }

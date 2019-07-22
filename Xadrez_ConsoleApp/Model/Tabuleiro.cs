@@ -38,6 +38,21 @@ namespace Model
             peca.Posicao = posicao;
         }
 
+        public Peca RetirarPeca(Posicao posicao)
+        {
+            if (!ExistePeca(posicao))
+            {
+                return null;
+            }
+            else
+            {
+                Peca aux = Peca(posicao);
+                aux.Posicao = null;
+                Pecas[posicao.Linha, posicao.Coluna] = null;
+                return aux;
+            }
+        }
+
         public bool PosicaoValida(Posicao posicao)
         {
             if (posicao.Linha < 0 || posicao.Linha >= Linhas || posicao.Coluna < 0 || posicao.Coluna >= Colunas)

@@ -20,5 +20,10 @@ namespace Model
             Tabuleiro = tabuleiro;
             QtdeMovimentos = 0;
         }
+
+        public void IncrementarMovimentos()
+        {
+            QtdeMovimentos++;
+        }
     }
 }
