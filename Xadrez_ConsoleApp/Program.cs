@@ -1,6 +1,7 @@
 ﻿using System;
 using Model;
 using Model.Enums;
+using Controller;
 
 namespace Xadrez_ConsoleApp
 {
@@ -10,7 +11,14 @@ namespace Xadrez_ConsoleApp
         {
             Tabuleiro T = new Tabuleiro(8, 8);
 
+            T.ColocarPeca(new Torre(T, Cor.Preto), new Posicao(3, 3));
+
             Tela.ImprimirTabuleiro(T);
+
+
+
+
+            Console.ReadKey();
         }
     }
 }
