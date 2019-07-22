@@ -1,6 +1,7 @@
 ﻿using System;
 using Model;
 using Model.Enums;
+using Controller;
 
 namespace Xadrez_ConsoleApp
 {
@@ -51,6 +52,14 @@ namespace Xadrez_ConsoleApp
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("* Peças Pretas *");
             Console.ForegroundColor = aux;
+        }
+
+        public static PosicaoXadrez LerPosicaoXadrez()
+        {
+            string s = Console.ReadLine();
+            char coluna = s[0];
+            int linha = int.Parse(s[1] + "");
+            return new PosicaoXadrez(coluna, linha);
         }
     }
 }

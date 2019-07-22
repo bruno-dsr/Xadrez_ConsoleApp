@@ -14,9 +14,23 @@ namespace Xadrez_ConsoleApp
             {
                 Partida partida = new Partida();
 
-                Tela.ImprimirTabuleiro(partida.Tabuleiro);
-                Console.WriteLine();
-                Tela.ImprimirLegendaPecas();
+                while (!partida.Finalizada)
+                {
+                    Tela.ImprimirTabuleiro(partida.Tabuleiro);
+                    Console.WriteLine();
+                    Tela.ImprimirLegendaPecas();
+                    Console.WriteLine();
+
+                    Console.Write("Origem: ");
+                    PosicaoXadrez origem = Tela.LerPosicaoXadrez();
+                    Console.Write("Destino: ");
+                    PosicaoXadrez destino = Tela.LerPosicaoXadrez();
+                    partida.MoverPeca(origem.ToPosicao(), destino.ToPosicao());
+
+                    Tela.ImprimirTabuleiro(partida.Tabuleiro);
+
+                    Console.ReadKey();
+                }
             }
 
             catch (TabuleiroException e)

@@ -6,14 +6,16 @@ namespace Controller
     class Partida
     {
         public Tabuleiro Tabuleiro { get; private set; }
-        public int Turno { get; set; }
-        public Cor JogadorAtual { get; set; }
+        private int Turno;
+        private Cor JogadorAtual;
+        public bool Finalizada { get; private set; }
 
         public Partida()
         {
             Tabuleiro = new Tabuleiro(8, 8);
             Turno = 1;
             JogadorAtual = Cor.Branco;
+            Finalizada = false;
             IniciarPecas();
         }
 
