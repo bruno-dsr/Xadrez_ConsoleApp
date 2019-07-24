@@ -14,5 +14,64 @@ namespace Controller
         {
             return "P ";
         }
+
+        public override bool[,] MovimentosPossiveis()
+        {
+            bool[,] movimentos = new bool[Tabuleiro.Linhas, Tabuleiro.Colunas];
+
+            Posicao p = new Posicao(Posicao.Linha, Posicao.Coluna);
+
+            //ACIMA(PEÇAS BRANCAS)
+            if (Cor == Cor.Branco)
+            {
+                p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+                p.SetPosicao(p.Linha - 1, p.Coluna);
+                if (Tabuleiro.PosicaoValida(p) && PodeMover(p))
+                {
+                    movimentos[p.Linha, p.Coluna] = true;
+
+                    p.SetPosicao(p.Linha - 1, p.Coluna);
+                    if (Tabuleiro.PosicaoValida(p) && PodeMover(p) && QtdeMovimentos == 0)
+                    {
+                        movimentos[p.Linha, p.Coluna] = true;
+                    }
+                }
+            }
+
+            //ABAIXO(PEÇAS PRETAS)
+            else if (Cor == Cor.Preto)
+            {
+                p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+                p.SetPosicao(p.Linha + 1, p.Coluna);
+                if (Tabuleiro.PosicaoValida(p) && PodeMover(p))
+                {
+                    movimentos[p.Linha, p.Coluna] = true;
+
+                    p.SetPosicao(p.Linha + 1, p.Coluna);
+                    if (Tabuleiro.PosicaoValida(p) && PodeMover(p) && QtdeMovimentos == 0)
+                    {
+                        movimentos[p.Linha, p.Coluna] = true;
+                    }
+                }
+            }
+
+            //DIREITA - SE EXISTIR PESSA ADVERSÁRIA
+            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+            p.SetPosicao(p.Linha, p.Coluna + 1);
+            if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && PodeMover(p))
+            {
+                movimentos[p.Linha, p.Coluna] = true;
+            }
+
+            //ESQUERDA - SE EXISTIR PESSA ADVERSÁRIA
+            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+            p.SetPosicao(p.Linha, p.Coluna - 1);
+            if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && PodeMover(p))
+            {
+                movimentos[p.Linha, p.Coluna] = true;
+            }
+
+            return movimentos;
+        }
     }
 }

@@ -6,7 +6,7 @@ using Model.Enums;
 
 namespace Model
 {
-    class Peca
+    abstract class Peca
     {
         public Posicao Posicao { get; set; }
         public Cor Cor { get; protected set; }
@@ -25,5 +25,19 @@ namespace Model
         {
             QtdeMovimentos++;
         }
+
+        public virtual bool PodeMover(Posicao posicao)
+        {
+            if(!Tabuleiro.ExistePeca(posicao) || Tabuleiro.Peca(posicao).Cor != this.Cor)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public abstract bool[,] MovimentosPossiveis();
     }
 }

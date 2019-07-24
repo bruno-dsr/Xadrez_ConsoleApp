@@ -22,14 +22,17 @@ namespace Xadrez_ConsoleApp
                     Console.WriteLine();
 
                     Console.Write("Origem: ");
-                    PosicaoXadrez origem = Tela.LerPosicaoXadrez();
+                    Posicao origem = Tela.LerPosicaoXadrez().ToPosicao();
+
+                    Console.Clear();
+                    bool[,] movimentosPossiveis = partida.Tabuleiro.Peca(origem).MovimentosPossiveis();
+                    Tela.ImprimirTabuleiro(partida.Tabuleiro, movimentosPossiveis);
+
                     Console.Write("Destino: ");
-                    PosicaoXadrez destino = Tela.LerPosicaoXadrez();
-                    partida.MoverPeca(origem.ToPosicao(), destino.ToPosicao());
+                    Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();
+                    partida.MoverPeca(origem, destino);
 
-                    Tela.ImprimirTabuleiro(partida.Tabuleiro);
-
-                    Console.ReadKey();
+                    Console.Clear();
                 }
             }
 

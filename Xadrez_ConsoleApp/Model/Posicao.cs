@@ -19,5 +19,11 @@ namespace Model
         {
             return ($"{Linha}, {Coluna}");
         }
+
+        public void SetPosicao(int linha, int coluna)
+        {
+            Linha = linha;
+            Coluna = coluna;
+        }
     }
 }
