@@ -55,22 +55,6 @@ namespace Controller
                 }
             }
 
-            //DIREITA - SE EXISTIR PESSA ADVERSÁRIA
-            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
-            p.SetPosicao(p.Linha, p.Coluna + 1);
-            if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && PodeMover(p))
-            {
-                movimentos[p.Linha, p.Coluna] = true;
-            }
-
-            //ESQUERDA - SE EXISTIR PESSA ADVERSÁRIA
-            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
-            p.SetPosicao(p.Linha, p.Coluna - 1);
-            if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && PodeMover(p))
-            {
-                movimentos[p.Linha, p.Coluna] = true;
-            }
-
             return movimentos;
         }
     }

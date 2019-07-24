@@ -34,7 +34,7 @@ namespace Controller
             }
 
             //ABAIXO
-            p = Posicao;
+            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
             p.SetPosicao(p.Linha + 1, p.Coluna);
             while (Tabuleiro.PosicaoValida(p) && PodeMover(p))
             {
@@ -47,7 +47,7 @@ namespace Controller
             }
 
             //DIREITA
-            p = Posicao;
+            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
             p.SetPosicao(p.Linha, p.Coluna + 1);
             while (Tabuleiro.PosicaoValida(p) && PodeMover(p))
             {
@@ -60,7 +60,7 @@ namespace Controller
             }
 
             //ESQUERDA
-            p = Posicao;
+            p.SetPosicao(Posicao.Linha, Posicao.Coluna);
             p.SetPosicao(p.Linha, p.Coluna - 1);
             while (Tabuleiro.PosicaoValida(p) && PodeMover(p))
             {
