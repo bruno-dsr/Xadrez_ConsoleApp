@@ -19,12 +19,7 @@ namespace Xadrez_ConsoleApp
                     try
                     {
                         Console.Clear();
-                        Tela.ImprimirTabuleiro(partida.Tabuleiro);
-
-                        Tela.ImprimirLegendaPecas();
-                        Console.WriteLine();
-                        Console.WriteLine("Turno: " + partida.Turno);
-                        Console.WriteLine("Aguardando jogador: " + partida.JogadorAtual);
+                        Tela.ImprimirPartida(partida);
 
                         Console.WriteLine();
                         Console.Write("Origem: ");
@@ -35,7 +30,6 @@ namespace Xadrez_ConsoleApp
                         bool[,] movimentosPossiveis = partida.Tabuleiro.Peca(origem).MovimentosPossiveis();
                         Tela.ImprimirTabuleiro(partida.Tabuleiro, movimentosPossiveis);
 
-                        Tela.ImprimirLegendaPecas();
                         Console.WriteLine();
                         Console.Write("Destino: ");
                         Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();

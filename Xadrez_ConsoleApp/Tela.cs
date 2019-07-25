@@ -2,11 +2,21 @@
 using Model;
 using Model.Enums;
 using Controller;
+using System.Collections.Generic;
 
 namespace Xadrez_ConsoleApp
 {
     class Tela
     {
+        public static void ImprimirPartida(Partida partida)
+        {
+            ImprimirTabuleiro(partida.Tabuleiro);
+            ImprimirPecasCapturadas(partida);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + partida.Turno);
+            Console.WriteLine("Aguardando jogador: " + partida.JogadorAtual);
+        }
+
         public static void ImprimirTabuleiro(Tabuleiro tab)
         {
             for (int i = 0; i < tab.Linhas; i++)
@@ -20,6 +30,32 @@ namespace Xadrez_ConsoleApp
             }
 
             Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static void ImprimirPecasCapturadas(Partida partida)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Peças capturadas:");
+            Console.Write("Brancas: ");
+            ImprimirConjuntoPecas(partida.GetPecasCapturadas(Cor.Branco));
+            Console.WriteLine();
+
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Pretas:  ");
+            ImprimirConjuntoPecas(partida.GetPecasCapturadas(Cor.Preto));
+            Console.ForegroundColor = aux;
+            Console.WriteLine();
+        }
+
+        public static void ImprimirConjuntoPecas(HashSet<Peca> conjunto)
+        {
+            Console.Write("[");
+            foreach (Peca peca in conjunto)
+            {
+                Console.Write(peca + " ");
+            }
+            Console.Write("]");
         }
 
         public static void ImprimirTabuleiro(Tabuleiro tab, bool[,] movimentosPossiveis)
@@ -69,17 +105,6 @@ namespace Xadrez_ConsoleApp
                     Console.ForegroundColor = aux;
                 }
             }
-        }
-
-        public static void ImprimirLegendaPecas()
-        {
-            Console.WriteLine();
-            Console.WriteLine("* Peças Brancas *");
-            ConsoleColor aux = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(" * Peças Pretas *");
-            Console.ForegroundColor = aux;
-            Console.WriteLine();
         }
 
         public static PosicaoXadrez LerPosicaoXadrez()
