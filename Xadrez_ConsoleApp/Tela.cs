@@ -13,14 +13,22 @@ namespace Xadrez_ConsoleApp
             ImprimirTabuleiro(partida.Tabuleiro);
             ImprimirPecasCapturadas(partida);
             Console.WriteLine();
-            if (partida.JogadorEmXeque)
+            if (!partida.Finalizada)
             {
-                Console.WriteLine("XEQUE!");
-                Console.WriteLine();
+                if (partida.JogadorEmXeque)
+                {
+                    Console.WriteLine("XEQUE!");
+                    Console.WriteLine();
+                }
+                Console.WriteLine("Turno: " + partida.Turno);
+                Console.WriteLine("Aguardando jogador: " + partida.JogadorAtual);
             }
-            Console.WriteLine("Turno: " + partida.Turno);
-            Console.WriteLine("Aguardando jogador: " + partida.JogadorAtual);
-            
+
+            else
+            {
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine("Vencedor: " + partida.JogadorAtual);
+            }
         }
 
         public static void ImprimirTabuleiro(Tabuleiro tab)

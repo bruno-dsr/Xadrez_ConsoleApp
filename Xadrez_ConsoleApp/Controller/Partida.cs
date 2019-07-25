@@ -101,19 +101,52 @@ namespace Controller
 
             if (rei == null)
             {
-                throw new TabuleiroException("Não existe rei da cor " + cor +" no tabuleiro!");
+                throw new TabuleiroException("Não existe rei da cor " + cor + " no tabuleiro!");
             }
 
-            foreach(Peca p in GetPecasEmJogo(GetCorAdversaria(rei.Cor)))
+            foreach (Peca p in GetPecasEmJogo(GetCorAdversaria(rei.Cor)))
             {
                 bool[,] movimentos = p.MovimentosPossiveis();
-                
+
                 if (movimentos[rei.Posicao.Linha, rei.Posicao.Coluna])
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public bool XequeMate(Cor cor)
+        {
+            if (!EmXeque(cor))
+            {
+                return false;
+            }
+
+            foreach (Peca p in GetPecasEmJogo(cor))
+            {
+                bool[,] movimentos = p.MovimentosPossiveis();
+                for (int i = 0; i < Tabuleiro.Linhas; i++)
+                {
+                    for (int j = 0; j < Tabuleiro.Colunas; j++)
+                    {
+                        if (movimentos[i, j])
+                        {
+                            Posicao origem = p.Posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca captura = MoverPeca(p.Posicao, destino);
+                            bool emXeque = EmXeque(cor);
+                            ReverterJogada(origem, destino, captura);
+
+                            if (!emXeque)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         public void Jogada(Posicao origem, Posicao destino)
@@ -130,20 +163,29 @@ namespace Controller
             {
                 JogadorEmXeque = true;
             }
+
             else
             {
                 JogadorEmXeque = false;
             }
 
-            Turno++;
-            MudarJogador();
+            if (XequeMate(GetCorAdversaria(JogadorAtual)))
+            {
+                Finalizada = true;
+            }
+
+            else
+            {
+                Turno++;
+                MudarJogador();
+            }
         }
 
         public void ReverterJogada(Posicao origem, Posicao destino, Peca captura)
         {
             Peca p = Tabuleiro.RetirarPeca(destino);
             p.DecrementarMovimentos();
-            if(captura != null)
+            if (captura != null)
             {
                 Tabuleiro.ColocarPeca(captura, destino);
                 pecasCapturadas.Remove(captura);
@@ -198,6 +240,14 @@ namespace Controller
 
         private void IniciarPecas()
         {
+            // TESTE XEQUEMATE
+            //NovaPeca(new Torre(Tabuleiro, Cor.Branco), new PosicaoXadrez('c', 1));
+            //NovaPeca(new Rei(Tabuleiro, Cor.Branco), new PosicaoXadrez('d', 1));
+            //NovaPeca(new Torre(Tabuleiro, Cor.Branco), new PosicaoXadrez('h', 7));
+
+            //NovaPeca(new Rei(Tabuleiro, Cor.Preto), new PosicaoXadrez('a', 8));
+            //NovaPeca(new Torre(Tabuleiro, Cor.Preto), new PosicaoXadrez('b', 8));
+
             NovaPeca(new Torre(Tabuleiro, Cor.Branco), new PosicaoXadrez('a', 1));
             NovaPeca(new Cavalo(Tabuleiro, Cor.Branco), new PosicaoXadrez('b', 1));
             NovaPeca(new Bispo(Tabuleiro, Cor.Branco), new PosicaoXadrez('c', 1));

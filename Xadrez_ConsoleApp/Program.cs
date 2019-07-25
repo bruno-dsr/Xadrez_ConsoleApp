@@ -1,6 +1,5 @@
 ﻿using System;
 using Model;
-using Model.Enums;
 using Model.ModelException;
 using Controller;
 
@@ -50,6 +49,9 @@ namespace Xadrez_ConsoleApp
                         Console.ReadKey();
                     }
                 }
+
+                Console.Clear();
+                Tela.ImprimirPartida(partida);
             }
 
             catch (TabuleiroException e)
