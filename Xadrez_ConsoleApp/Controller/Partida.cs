@@ -1,13 +1,14 @@
 ﻿using Model;
 using Model.Enums;
+using Model.ModelException;
 
 namespace Controller
 {
     class Partida
     {
         public Tabuleiro Tabuleiro { get; private set; }
-        private int Turno;
-        private Cor JogadorAtual;
+        public int Turno { get; private set; }
+        public Cor JogadorAtual { get; private set; }
         public bool Finalizada { get; private set; }
 
         public Partida()
@@ -25,6 +26,51 @@ namespace Controller
             P.IncrementarMovimentos();
             Peca Captura = Tabuleiro.RetirarPeca(destino);
             Tabuleiro.ColocarPeca(P, destino);
+        }
+
+        public void Jogada(Posicao origem, Posicao destino)
+        {
+            MoverPeca(origem, destino);
+            Turno++;
+            MudarJogador();
+        }
+
+        public void ValidarOrigem(Posicao origem)
+        {
+            if (!Tabuleiro.ExistePeca(origem))
+            {
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            }
+
+            if (JogadorAtual != Tabuleiro.Peca(origem).Cor)
+            {
+                throw new TabuleiroException("A peça de origem escolhida não é sua!");
+            }
+
+            if (!Tabuleiro.Peca(origem).ExistemMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Não existem movimentos possíveis para a peça escolhida!");
+            }
+        }
+
+        public void ValidarDestino(Posicao origem, Posicao destino)
+        {
+            if (!Tabuleiro.Peca(origem).DestinoValido(destino))
+            {
+                throw new TabuleiroException("Impossível mover para o destino escolhido!");
+            }
+        }
+
+        private void MudarJogador()
+        {
+            if(JogadorAtual == Cor.Branco)
+            {
+                JogadorAtual = Cor.Preto;
+            }
+            else
+            {
+                JogadorAtual = Cor.Branco;
+            }
         }
 
         private void IniciarPecas()

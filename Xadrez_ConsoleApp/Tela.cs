@@ -73,11 +73,13 @@ namespace Xadrez_ConsoleApp
 
         public static void ImprimirLegendaPecas()
         {
+            Console.WriteLine();
             Console.WriteLine("* Peças Brancas *");
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("* Peças Pretas *");
+            Console.Write(" * Peças Pretas *");
             Console.ForegroundColor = aux;
+            Console.WriteLine();
         }
 
         public static PosicaoXadrez LerPosicaoXadrez()
