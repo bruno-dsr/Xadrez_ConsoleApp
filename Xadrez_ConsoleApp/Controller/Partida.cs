@@ -13,6 +13,7 @@ namespace Controller
         public bool Finalizada { get; private set; }
         private HashSet<Peca> pecas;
         private HashSet<Peca> pecasCapturadas;
+        public bool JogadorEmXeque { get; private set; }
 
         public Partida()
         {
@@ -20,12 +21,13 @@ namespace Controller
             Turno = 1;
             JogadorAtual = Cor.Branco;
             Finalizada = false;
+            JogadorEmXeque = false;
             pecas = new HashSet<Peca>();
             pecasCapturadas = new HashSet<Peca>();
             IniciarPecas();
         }
 
-        public void MoverPeca(Posicao origem, Posicao destino)
+        public Peca MoverPeca(Posicao origem, Posicao destino)
         {
             Peca P = Tabuleiro.RetirarPeca(origem);
             P.IncrementarMovimentos();
@@ -35,6 +37,8 @@ namespace Controller
             {
                 pecasCapturadas.Add(Captura);
             }
+
+            return Captura;
         }
 
         public HashSet<Peca> GetPecasCapturadas(Cor cor)
@@ -67,11 +71,85 @@ namespace Controller
             return emJogo;
         }
 
+        private Cor GetCorAdversaria(Cor cor)
+        {
+            if (cor == Cor.Branco)
+            {
+                return Cor.Preto;
+            }
+            else
+            {
+                return Cor.Branco;
+            }
+        }
+
+        private Peca GetRei(Cor cor)
+        {
+            foreach (Peca peca in GetPecasEmJogo(cor))
+            {
+                if (peca is Rei)
+                {
+                    return peca;
+                }
+            }
+            return null;
+        }
+
+        public bool EmXeque(Cor cor)
+        {
+            Peca rei = GetRei(cor);
+
+            if (rei == null)
+            {
+                throw new TabuleiroException("Não existe rei da cor " + cor +" no tabuleiro!");
+            }
+
+            foreach(Peca p in GetPecasEmJogo(GetCorAdversaria(rei.Cor)))
+            {
+                bool[,] movimentos = p.MovimentosPossiveis();
+                
+                if (movimentos[rei.Posicao.Linha, rei.Posicao.Coluna])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void Jogada(Posicao origem, Posicao destino)
         {
-            MoverPeca(origem, destino);
+            Peca captura = MoverPeca(origem, destino);
+
+            if (EmXeque(JogadorAtual))
+            {
+                ReverterJogada(origem, destino, captura);
+                throw new TabuleiroException("Impossível se colocar em cheque!");
+            }
+
+            if (EmXeque(GetCorAdversaria(JogadorAtual)))
+            {
+                JogadorEmXeque = true;
+            }
+            else
+            {
+                JogadorEmXeque = false;
+            }
+
             Turno++;
             MudarJogador();
+        }
+
+        public void ReverterJogada(Posicao origem, Posicao destino, Peca captura)
+        {
+            Peca p = Tabuleiro.RetirarPeca(destino);
+            p.DecrementarMovimentos();
+            if(captura != null)
+            {
+                Tabuleiro.ColocarPeca(captura, destino);
+                pecasCapturadas.Remove(captura);
+            }
+            Tabuleiro.ColocarPeca(p, origem);
+
         }
 
         public void ValidarOrigem(Posicao origem)

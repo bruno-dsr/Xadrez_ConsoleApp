@@ -26,6 +26,11 @@ namespace Model
             QtdeMovimentos++;
         }
 
+        public void DecrementarMovimentos()
+        {
+            QtdeMovimentos--;
+        }
+
         public virtual bool PodeMover(Posicao posicao)
         {
             if (!Tabuleiro.ExistePeca(posicao) || Tabuleiro.Peca(posicao).Cor != this.Cor)
