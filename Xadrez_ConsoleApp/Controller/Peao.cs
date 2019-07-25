@@ -36,6 +36,20 @@ namespace Controller
                         movimentos[p.Linha, p.Coluna] = true;
                     }
                 }
+
+                p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+                p.SetPosicao(p.Linha - 1, p.Coluna -1);
+                if(Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && Tabuleiro.Peca(p).Cor == Cor.Preto && PodeMover(p))
+                {
+                    movimentos[p.Linha, p.Coluna] = true;
+                }
+
+                p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+                p.SetPosicao(p.Linha - 1, p.Coluna + 1);
+                if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && Tabuleiro.Peca(p).Cor == Cor.Preto && PodeMover(p))
+                {
+                    movimentos[p.Linha, p.Coluna] = true;
+                }
             }
 
             //ABAIXO(PEÇAS PRETAS)
@@ -53,7 +67,23 @@ namespace Controller
                         movimentos[p.Linha, p.Coluna] = true;
                     }
                 }
+
+                p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+                p.SetPosicao(p.Linha + 1, p.Coluna - 1);
+                if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && Tabuleiro.Peca(p).Cor == Cor.Branco && PodeMover(p))
+                {
+                    movimentos[p.Linha, p.Coluna] = true;
+                }
+
+                p.SetPosicao(Posicao.Linha, Posicao.Coluna);
+                p.SetPosicao(p.Linha + 1, p.Coluna + 1);
+                if (Tabuleiro.PosicaoValida(p) && Tabuleiro.ExistePeca(p) && Tabuleiro.Peca(p).Cor == Cor.Branco && PodeMover(p))
+                {
+                    movimentos[p.Linha, p.Coluna] = true;
+                }
             }
+
+            
 
             return movimentos;
         }
