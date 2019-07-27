@@ -67,7 +67,7 @@ namespace Xadrez_ConsoleApp
             Console.Write("[");
             foreach (Peca peca in conjunto)
             {
-                Console.Write(peca + " ");
+                Console.Write(peca);
             }
             Console.Write("]");
         }

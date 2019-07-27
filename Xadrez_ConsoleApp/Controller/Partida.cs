@@ -14,6 +14,7 @@ namespace Controller
         private HashSet<Peca> pecas;
         private HashSet<Peca> pecasCapturadas;
         public bool JogadorEmXeque { get; private set; }
+        public Peca EnPassant { get; private set; }
 
         public Partida()
         {
@@ -24,6 +25,7 @@ namespace Controller
             JogadorEmXeque = false;
             pecas = new HashSet<Peca>();
             pecasCapturadas = new HashSet<Peca>();
+            EnPassant = null;
             IniciarPecas();
         }
 
@@ -58,6 +60,25 @@ namespace Controller
                 Tabuleiro.ColocarPeca(T, destinoT);
             }
 
+            // EN PASSANT
+            if (P is Peao && destino.Coluna != origem.Coluna && Captura == null)
+            {
+                Posicao enPassantPosisao;
+                if(P.Cor == Cor.Branco)
+                {
+                    enPassantPosisao = new Posicao(P.Posicao.Linha + 1, P.Posicao.Coluna);
+                }
+                else
+                {
+                    enPassantPosisao = new Posicao(P.Posicao.Linha - 1, P.Posicao.Coluna);
+                }
+
+                if (Tabuleiro.Peca(enPassantPosisao) == EnPassant)
+                {
+                    Captura = Tabuleiro.RetirarPeca(enPassantPosisao);
+                    pecasCapturadas.Add(Captura);
+                }
+            }
 
             return Captura;
         }
@@ -200,6 +221,17 @@ namespace Controller
                 Turno++;
                 MudarJogador();
             }
+
+            //EN PASSANT
+            Peca p = Tabuleiro.Peca(destino);
+            if(p is Peao && (destino.Linha == origem.Linha + 2 || destino.Linha == origem.Linha - 2))
+            {
+                EnPassant = p;
+            }
+            else
+            {
+                EnPassant = null;
+            }
         }
 
         public void ReverterJogada(Posicao origem, Posicao destino, Peca captura)
@@ -231,6 +263,24 @@ namespace Controller
                 Peca T = Tabuleiro.RetirarPeca(destinoT);
                 T.DecrementarMovimentos();
                 Tabuleiro.ColocarPeca(T, origemT);
+            }
+
+            //EN PASSANT
+            if (p is Peao)
+            {
+                if(destino.Coluna != origem.Coluna && captura == EnPassant)
+                {
+                    Peca peao = Tabuleiro.RetirarPeca(destino);
+                    Posicao pos;
+                    if (p.Cor == Cor.Branco)
+                    {
+                        pos = new Posicao(3, destino.Coluna);
+                    }
+                    else
+                    {
+                        pos = new Posicao(4, destino.Coluna);
+                    }
+                }
             }
         }
 
@@ -297,14 +347,14 @@ namespace Controller
             NovaPeca(new Cavalo(Tabuleiro, Cor.Branco), new PosicaoXadrez('g', 1));
             NovaPeca(new Torre(Tabuleiro, Cor.Branco), new PosicaoXadrez('h', 1));
 
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('a', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('b', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('c', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('d', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('e', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('f', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('g', 2));
-            NovaPeca(new Peao(Tabuleiro, Cor.Branco), new PosicaoXadrez('h', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('a', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('b', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('c', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('d', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('e', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('f', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('g', 2));
+            NovaPeca(new Peao(Tabuleiro, Cor.Branco, this), new PosicaoXadrez('h', 2));
 
             NovaPeca(new Torre(Tabuleiro, Cor.Preto), new PosicaoXadrez('a', 8));
             NovaPeca(new Cavalo(Tabuleiro, Cor.Preto), new PosicaoXadrez('b', 8));
@@ -315,14 +365,14 @@ namespace Controller
             NovaPeca(new Cavalo(Tabuleiro, Cor.Preto), new PosicaoXadrez('g', 8));
             NovaPeca(new Torre(Tabuleiro, Cor.Preto), new PosicaoXadrez('h', 8));
 
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('a', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('b', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('c', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('d', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('e', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('f', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('g', 7));
-            NovaPeca(new Peao(Tabuleiro, Cor.Preto), new PosicaoXadrez('h', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('a', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('b', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('c', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('d', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('e', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('f', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('g', 7));
+            NovaPeca(new Peao(Tabuleiro, Cor.Preto, this), new PosicaoXadrez('h', 7));
         }
     }
 }
