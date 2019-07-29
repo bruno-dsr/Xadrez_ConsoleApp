@@ -2,6 +2,7 @@
 using Model.Enums;
 using Model.ModelException;
 using System.Collections.Generic;
+using System;
 
 namespace Controller
 {
@@ -64,7 +65,7 @@ namespace Controller
             if (P is Peao && destino.Coluna != origem.Coluna && Captura == null)
             {
                 Posicao enPassantPosisao;
-                if(P.Cor == Cor.Branco)
+                if (P.Cor == Cor.Branco)
                 {
                     enPassantPosisao = new Posicao(P.Posicao.Linha + 1, P.Posicao.Coluna);
                 }
@@ -201,6 +202,55 @@ namespace Controller
                 throw new TabuleiroException("Impossível se colocar em cheque!");
             }
 
+            Peca p = Tabuleiro.Peca(destino);
+
+            //PROMOÇÃO DE PEÇA
+            if (p is Peao)
+            {
+                if (p.Cor == Cor.Branco && destino.Linha == 0 || p.Cor == Cor.Preto && destino.Linha == 7)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Possível promoção!");
+                    Console.Write("Escolha [T]Torre, [B]Bispo, [C]Cavalo ou [D]Dama: ");
+                    string promo = Console.ReadLine().ToLower();
+
+                    switch (promo)
+                    {
+                        case "t":
+                            Peca T = new Torre(Tabuleiro, p.Cor);
+                            Tabuleiro.RetirarPeca(destino);
+                            pecas.Remove(p);
+                            Tabuleiro.ColocarPeca(T, destino);
+                            pecas.Add(T);
+                            break;
+
+                        case "b":
+                            Peca B = new Bispo(Tabuleiro, p.Cor);
+                            Tabuleiro.RetirarPeca(destino);
+                            pecas.Remove(p);
+                            Tabuleiro.ColocarPeca(B, destino);
+                            pecas.Add(B);
+                            break;
+
+                        case "c":
+                            Peca C = new Cavalo(Tabuleiro, p.Cor);
+                            Tabuleiro.RetirarPeca(destino);
+                            pecas.Remove(p);
+                            Tabuleiro.ColocarPeca(C, destino);
+                            pecas.Add(C);
+                            break;
+
+                        case "d":
+                            Peca D = new Dama(Tabuleiro, p.Cor);
+                            Tabuleiro.RetirarPeca(destino);
+                            pecas.Remove(p);
+                            Tabuleiro.ColocarPeca(D, destino);
+                            pecas.Add(D);
+                            break;
+                    }
+                }
+            }
+
             if (EmXeque(GetCorAdversaria(JogadorAtual)))
             {
                 JogadorEmXeque = true;
@@ -223,8 +273,7 @@ namespace Controller
             }
 
             //EN PASSANT
-            Peca p = Tabuleiro.Peca(destino);
-            if(p is Peao && (destino.Linha == origem.Linha + 2 || destino.Linha == origem.Linha - 2))
+            if (p is Peao && (destino.Linha == origem.Linha + 2 || destino.Linha == origem.Linha - 2))
             {
                 EnPassant = p;
             }
@@ -268,7 +317,7 @@ namespace Controller
             //EN PASSANT
             if (p is Peao)
             {
-                if(destino.Coluna != origem.Coluna && captura == EnPassant)
+                if (destino.Coluna != origem.Coluna && captura == EnPassant)
                 {
                     Peca peao = Tabuleiro.RetirarPeca(destino);
                     Posicao pos;
